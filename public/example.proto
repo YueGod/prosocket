@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package example;
+
+// 用户信息
+message User {
+  int32 id = 1;
+  string username = 2;
+  string email = 3;
+  bool is_active = 4;
+  repeated string roles = 5;
+  UserProfile profile = 6;
+}
+
+// 用户详细信息
+message UserProfile {
+  string first_name = 1;
+  string last_name = 2;
+  int32 age = 3;
+  string avatar_url = 4;
+  string bio = 5;
+}
+
+// 登录请求
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+  bool remember_me = 3;
+}
+
+// 登录响应
+message LoginResponse {
+  bool success = 1;
+  string token = 2;
+  User user = 3;
+  string message = 4;
+}
+
+// 消息类型
+enum MessageType {
+  TEXT = 0;
+  IMAGE = 1;
+  VIDEO = 2;
+  FILE = 3;
+}
+
+// 聊天消息
+message ChatMessage {
+  int64 id = 1;
+  int32 sender_id = 2;
+  int32 receiver_id = 3;
+  string content = 4;
+  MessageType type = 5;
+  int64 timestamp = 6;
+  bool is_read = 7;
+  repeated string attachments = 8;
+}
+
+// 通用请求
+message Request {
+  string action = 1;
+  bytes payload = 2;
+  map<string, string> headers = 3;
+}
+
+// 通用响应
+message Response {
+  int32 code = 1;
+  string message = 2;
+  bytes data = 3;
+  map<string, string> metadata = 4;
+}
+
+// 列表请求
+message ListRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+  string sort_by = 3;
+  bool ascending = 4;
+  map<string, string> filters = 5;
+}
+
+// 列表响应
+message ListResponse {
+  repeated User items = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// 心跳消息
+message Heartbeat {
+  int64 timestamp = 1;
+  string client_id = 2;
+}
+
+// 通知消息
+message Notification {
+  string id = 1;
+  string title = 2;
+  string body = 3;
+  string icon = 4;
+  string url = 5;
+  int64 created_at = 6;
+  bool is_read = 7;
+}

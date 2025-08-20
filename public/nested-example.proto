@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package nested;
+
+// 内嵌的用户信息
+message UserInfo {
+  string user_id = 1;
+  string username = 2;
+  string email = 3;
+  int32 level = 4;
+}
+
+// 内嵌的设备信息
+message DeviceInfo {
+  string device_id = 1;
+  string device_type = 2;
+  string os_version = 3;
+  string app_version = 4;
+}
+
+// 认证令牌
+message AuthToken {
+  string token = 1;
+  int64 expires_at = 2;
+  repeated string scopes = 3;
+}
+
+// 包含嵌套消息的请求
+message ComplexRequest {
+  string request_id = 1;
+  UserInfo user = 2;     // 直接的消息类型字段
+  DeviceInfo device = 3; // 直接的消息类型字段
+  bytes auth_data = 4;   // 可能包含AuthToken的二进制数据
+  bytes payload = 5;     // 可能包含任意消息的二进制数据
+  map<string, string> headers = 6;
+  int64 timestamp = 7;
+}
+
+// 包含嵌套消息的响应
+message ComplexResponse {
+  string request_id = 1;
+  int32 code = 2;
+  string message = 3;
+  bytes user_data = 4;   // 可能包含UserInfo的二进制数据
+  bytes result_data = 5; // 可能包含任意消息的二进制数据
+  map<string, string> metadata = 6;
+}
+
+// 游戏物品
+message GameItem {
+  string item_id = 1;
+  string name = 2;
+  int32 quantity = 3;
+  map<string, int32> attributes = 4;
+}
+
+// 游戏角色
+message GameCharacter {
+  string character_id = 1;
+  string name = 2;
+  int32 level = 3;
+  repeated GameItem inventory = 4; // 数组类型的嵌套消息
+  bytes equipment_data = 5;        // 可能包含装备信息的二进制数据
+}
+
+// 事件数据
+message EventData {
+  string event_type = 1;
+  bytes event_payload = 2; // 根据event_type包含不同的消息
+  int64 event_time = 3;
+}
+
+// 批量请求
+message BatchRequest {
+  repeated bytes requests = 1; // 包含多个序列化请求的数组
+  string batch_id = 2;
+}
+
+// 批量响应
+message BatchResponse {
+  repeated bytes responses = 1; // 包含多个序列化响应的数组
+  string batch_id = 2;
+  int32 success_count = 3;
+  int32 failed_count = 4;
+}

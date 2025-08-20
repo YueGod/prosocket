@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProSocket 测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .link-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #409eff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 5px;
+        }
+
+        .link-button:hover {
+            background-color: #66b1ff;
+        }
+
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        .status.success {
+            background-color: #f0f9ff;
+            color: #67c23a;
+        }
+
+        .status.info {
+            background-color: #f4f4f5;
+            color: #909399;
+        }
+    </style>
+</head>
+
+<body>
+<h1>ProSocket WebSocket Protobuf 调试工具</h1>
+
+<div class="section">
+    <h2>🚀 快速访问</h2>
+    <a href="http://localhost:8080" class="link-button" target="_blank">访问主页</a>
+    <a href="http://localhost:8080/#/prosocket" class="link-button" target="_blank">打开ProSocket工具</a>
+</div>
+
+<div class="section">
+    <h2>📋 使用步骤</h2>
+    <ol>
+        <li>
+            <strong>启动测试服务器</strong>（可选）
+            <div class="code-block">node test-server.js</div>
+            <div class="status info">测试服务器将运行在 ws://localhost:8081</div>
+        </li>
+        <li>
+            <strong>访问ProSocket工具</strong>
+            <div>点击上方"打开ProSocket工具"按钮</div>
+        </li>
+        <li>
+            <strong>建立WebSocket连接</strong>
+            <div>在顶部输入框中输入 <code>localhost:8081</code>，点击"连接"</div>
+        </li>
+        <li>
+            <strong>导入Proto文件</strong>
+            <div>点击左侧"导入Proto"按钮，选择 <code>public/example.proto</code></div>
+        </li>
+        <li>
+            <strong>发送测试消息</strong>
+            <div>在消息编辑器中：</div>
+            <ul>
+                <li>点击刷新按钮（⟳）刷新消息类型列表</li>
+                <li>从下拉框选择消息类型（如 example.LoginRequest）</li>
+                <li>填写字段值</li>
+                <li>点击"发送消息"</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<div class="section">
+    <h2>🧪 测试用例</h2>
+    <h3>1. LoginRequest 示例</h3>
+    <div class="code-block">
+        {
+        "username": "testuser",
+        "password": "123456",
+        "remember_me": true
+        }
+    </div>
+
+    <h3>2. ChatMessage 示例</h3>
+    <div class="code-block">
+        {
+        "id": 1001,
+        "sender_id": 123,
+        "receiver_id": 456,
+        "content": "Hello, ProSocket!",
+        "type": "TEXT",
+        "timestamp": 1639500000000,
+        "is_read": false,
+        "attachments": []
+        }
+    </div>
+
+    <h3>3. Heartbeat 示例</h3>
+    <div class="code-block">
+        {
+        "timestamp": 1639500000000,
+        "client_id": "client-001"
+        }
+    </div>
+</div>
+
+<div class="section">
+    <h2>❗ 常见问题</h2>
+    <dl>
+        <dt><strong>Q: 导入Proto文件后，消息类型下拉框为空？</strong></dt>
+        <dd>A: 点击消息编辑器右上角的刷新按钮（⟳）手动刷新消息类型列表。</dd>
+
+        <dt><strong>Q: WebSocket连接失败？</strong></dt>
+        <dd>A: 确保测试服务器已启动（运行 <code>node test-server.js</code>），或检查目标服务器地址是否正确。</dd>
+
+        <dt><strong>Q: 消息发送失败？</strong></dt>
+        <dd>A: 检查WebSocket连接状态，确保已连接。查看浏览器控制台是否有错误信息。</dd>
+    </dl>
+</div>
+
+<div class="section">
+    <h2>📊 状态检查</h2>
+    <div>
+        <div class="status success" id="app-status">检查应用状态...</div>
+    </div>
+    <div style="margin-top: 10px;">
+        <button onclick="checkStatus()">刷新状态</button>
+    </div>
+</div>
+
+<script>
+    function checkStatus() {
+        const statusEl = document.getElementById('app-status');
+
+        // 检查主应用
+        fetch('http://localhost:8080')
+            .then(response => {
+                if (response.ok) {
+                    statusEl.textContent = '✅ ProSocket应用运行正常';
+                    statusEl.className = 'status success';
+                } else {
+                    statusEl.textContent = '❌ ProSocket应用未响应';
+                    statusEl.className = 'status info';
+                }
+            })
+            .catch(error => {
+                statusEl.textContent = '❌ ProSocket应用未启动，请运行 npm run serve';
+                statusEl.className = 'status info';
+            });
+    }
+
+    // 页面加载时自动检查状态
+    window.onload = checkStatus;
+</script>
+</body>
+
+</html>

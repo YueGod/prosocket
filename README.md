@@ -1,169 +1,264 @@
-# ProSocket - WebSocket Protobuf 调试工具
+# ProSocket
 
-一个功能强大的WebSocket调试工具，专门用于测试和调试基于Protobuf协议的WebSocket服务。
+[中文文档](./README_zh.md) | English
 
-## 🚀 特性
+## ProSocket - WebSocket Protobuf Debugging Tool
 
-- ✅ **WebSocket连接管理** - 支持连接、断开、自动重连、心跳检测
-- ✅ **Proto文件管理** - 批量导入.proto文件，自动解析消息类型
-- ✅ **双模式消息编辑** - 支持表单和JSON两种编辑模式
-- ✅ **消息编解码** - 自动将消息编码为Protobuf二进制格式
-- ✅ **消息历史记录** - 记录所有发送和接收的消息，支持搜索和过滤
-- ✅ **二进制数据查看** - 支持十六进制、Base64等多种格式查看
-- ✅ **消息模板生成** - 自动生成消息模板，快速填写
-- ✅ **配置保存** - 保存连接配置，方便下次使用
+ProSocket is a powerful WebSocket debugging tool built with Vue 3 that specializes in Protocol Buffer message encoding
+and decoding. It provides a comprehensive interface for testing WebSocket connections with Protobuf-encoded messages.
 
-## 📦 安装
+### ✨ Features
+
+- **🔌 WebSocket Connection Management**
+    - Support for ws:// and wss:// protocols
+    - Auto-reconnection mechanism
+    - Connection status monitoring
+    - Heartbeat detection support
+    - Connection configuration persistence
+
+- **📄 Proto File Management**
+    - Batch import of .proto files
+    - Automatic message type extraction
+    - Message type tree view
+    - Support for nested message structures
+    - Proto file hot-reloading
+
+- **📝 Message Editor**
+    - Dual editing modes: Form and JSON
+    - Automatic message template generation
+    - Field validation
+    - Support for nested messages
+    - Special handling for bytes fields (raw/message/base64)
+    - Array field support
+    - Rich data type support (string, number, boolean, bytes, etc.)
+
+- **📊 Message History**
+    - Complete sent/received message logging
+    - Message filtering and searching
+    - Binary data preview (Hex/Base64/Bytes)
+    - Message re-decoding capability
+    - Export history to JSON
+    - Automatic decoding of received messages
+    - Nested message detection and decoding
+
+- **🛠️ Developer Tools**
+    - Test WebSocket server included
+    - Example proto files provided
+    - Binary data visualization
+    - Message size tracking
+    - Decode error handling
+
+### 🚀 Quick Start
+
+#### Prerequisites
+
+- Node.js >= 12.0.0
+- npm or yarn
+
+#### Installation
 
 ```bash
-# 克隆项目
-git clone [repository-url]
+# Clone the repository
+git clone https://github.com/yourusername/prosocket.git
 cd prosocket
 
-# 安装依赖
+# Install dependencies
 npm install
 
-# 启动开发服务器
+# Start development server
 npm run serve
+
+# Build for production
+npm run build
 ```
 
-## 🎯 使用方法
-
-### 1. 启动应用
+#### Running the Test Server
 
 ```bash
-npm run serve
-```
+# Install test server dependencies (if needed)
+npm install ws protobufjs
 
-访问 http://localhost:8080
-
-### 2. 启动测试服务器（可选）
-
-项目包含一个测试用的WebSocket服务器：
-
-```bash
-# 安装ws依赖（如果还没安装）
-npm install ws
-
-# 启动测试服务器
+# Start the test server
 node test-server.js
 ```
 
-测试服务器运行在 `ws://localhost:8081`
+The test server will start on `ws://localhost:8081` and support the example proto messages.
 
-### 3. 使用步骤
+### 📖 Usage Guide
 
-1. **建立连接**
-    - 在顶部输入WebSocket服务器地址（如 `ws://localhost:8081`）
-    - 点击"连接"按钮
+#### 1. Establish WebSocket Connection
 
-2. **导入Proto文件**
-    - 点击左侧"导入Proto"按钮
-    - 选择一个或多个.proto文件
-    - 系统会自动解析所有消息类型
+1. Enter the WebSocket server address in the connection bar (e.g., `localhost:8080`)
+2. Select protocol (ws:// or wss://)
+3. Click the "Connect" button
+4. The status indicator will show the connection state
 
-3. **编辑消息**
-    - 在中间区域选择消息类型
-    - 使用表单模式填写字段值，或使用JSON模式直接编辑
-    - 系统会自动验证消息格式
+#### 2. Import Proto Files
 
-4. **发送消息**
-    - 点击"发送消息"按钮
-    - 消息会被编码为Protobuf二进制格式并发送
-    - 可以选择"显示二进制"查看编码后的数据
+1. Click the "Import Proto" button in the left sidebar
+2. Select one or more .proto files
+3. The system will automatically parse and extract message types
+4. Message types will appear in the tree view
 
-5. **查看历史**
-    - 右侧显示所有消息历史
-    - 点击消息可查看详细信息
-    - 支持导出历史记录为JSON文件
+#### 3. Edit Messages
 
-## 🛠️ 技术栈
+**Form Mode:**
 
-- **Vue 3** - 前端框架
-- **Element Plus** - UI组件库
-- **protobufjs** - Protobuf处理库
-- **WebSocket API** - 原生WebSocket支持
+- Select a message type from the dropdown
+- Fill in the fields using the form interface
+- Nested messages can be edited in a separate dialog
+- Arrays support adding/removing items dynamically
 
-## 📁 项目结构
+**JSON Mode:**
+
+- Edit message content directly in JSON format
+- Use the format/validate buttons for assistance
+- Support for copy/paste operations
+
+#### 4. Send Messages
+
+1. Choose the message type
+2. Edit the message content
+3. Click "Send Message"
+4. The message will be encoded to Protobuf binary format
+5. View the sent message in the history panel
+
+#### 5. View Message History
+
+- All sent and received messages are displayed in the right panel
+- Click on any message to view details
+- Use filters to search specific messages
+- Export history for analysis
+
+### 🏗️ Project Structure
 
 ```
 prosocket/
 ├── public/
-│   └── example.proto          # 示例Proto文件
+│   ├── example.proto         # Example proto file
+│   └── nested-example.proto  # Nested message examples
 ├── src/
 │   ├── components/
 │   │   └── ProSocket/
-│   │       ├── ConnectionPanel.vue    # 连接管理面板
-│   │       ├── ProtoManager.vue       # Proto文件管理
-│   │       ├── MessageSender.vue      # 消息发送组件
-│   │       └── MessageHistory.vue     # 消息历史组件
+│   │       ├── ConnectionPanel.vue    # WebSocket connection management
+│   │       ├── ProtoManager.vue       # Proto file management
+│   │       ├── MessageSender.vue      # Message editor and sender
+│   │       └── MessageHistory.vue     # Message history display
 │   ├── utils/
-│   │   ├── websocket.js      # WebSocket管理工具
-│   │   └── protobuf.js       # Protobuf处理工具
-│   └── views/
-│       └── ProSocketView.vue  # 主视图
-└── test-server.js             # 测试服务器
-
+│   │   ├── websocket.js              # WebSocket manager
+│   │   ├── protobuf.js               # Protobuf handler
+│   │   └── protobuf-simple.js        # Simplified protobuf handler
+│   ├── views/
+│   │   ├── HomeView.vue              # Home page
+│   │   └── ProSocketView.vue         # Main ProSocket interface
+│   └── main.js                       # Application entry
+├── test-server.js                    # Test WebSocket server
+└── package.json
 ```
 
-## 🎨 界面预览
+### 🔧 Configuration
 
-### 主界面布局
+#### WebSocket Configuration
 
+```javascript
+// Connection settings
+{
+    autoReconnect: true,          // Enable auto-reconnection
+        maxReconnectAttempts
+:
+    5,      // Maximum reconnection attempts
+        enableHeartbeat
+:
+    false,       // Enable heartbeat detection
+        heartbeatInterval
+:
+    30         // Heartbeat interval (seconds)
+}
 ```
-┌─────────────────────────────────────────────────────┐
-│                   连接管理栏                          │
-├──────────┬────────────────────────┬─────────────────┤
-│          │                        │                  │
-│  Proto   │      消息编辑器         │   消息历史       │
-│  文件    │                        │                  │
-│  管理    │   - 消息类型选择        │   发送/接收记录   │
-│          │   - 字段编辑           │                  │
-│          │   - JSON编辑           │                  │
-│          │                        │                  │
-└──────────┴────────────────────────┴─────────────────┘
-```
 
-## 📝 示例Proto文件
+#### Message Decoding Settings
 
-项目包含一个示例Proto文件 `public/example.proto`，包含以下消息类型：
+- **Auto Decode**: Automatically attempt to decode received binary messages
+- **Default Message Type**: Set default type for decoding received messages
+- **Fallback Types**: Alternative message types to try if default fails
 
-- User / UserProfile - 用户信息
-- LoginRequest / LoginResponse - 登录消息
-- ChatMessage - 聊天消息
-- Request / Response - 通用请求响应
-- Heartbeat - 心跳消息
-- Notification - 通知消息
+### 🛡️ Supported Proto Features
 
-## 🔧 配置说明
+- ✅ Basic types (string, int32, bool, etc.)
+- ✅ Repeated fields (arrays)
+- ✅ Nested messages
+- ✅ Enums
+- ✅ Maps
+- ✅ Bytes fields
+- ✅ Oneof fields (limited support)
+- ✅ Default values
 
-### WebSocket连接配置
+### 💡 Advanced Features
 
-- **自动重连** - 连接断开后自动尝试重连
-- **重连次数** - 最大重连尝试次数
-- **心跳检测** - 定期发送心跳保持连接
-- **心跳间隔** - 心跳发送间隔时间
+#### Nested Message Handling
 
-### 消息发送选项
+For bytes fields that contain encoded messages:
 
-- **显示二进制** - 发送前预览二进制数据
-- **自动格式化** - 发送后自动格式化JSON显示
+1. Select "Message Type" mode for the bytes field
+2. Choose the message type to encode
+3. Edit the nested message content
+4. The system will automatically encode it to bytes
 
-## 🚧 注意事项
+#### Binary Data Formats
 
-1. Proto文件必须是有效的Protocol Buffers格式
-2. WebSocket服务器需要支持二进制消息
-3. 大型Proto文件可能需要较长加载时间
-4. 建议在开发环境使用，生产环境请谨慎
+Support for multiple binary data input/output formats:
 
-## 📄 License
+- **Hexadecimal**: `0x12 0x34 0x56`
+- **Base64**: `EjRW`
+- **Byte Array**: `[18, 52, 86]`
 
-MIT
+#### Message Templates
 
-## 🤝 贡献
+The system automatically generates templates based on proto definitions:
 
-欢迎提交Issue和Pull Request！
+- Default values for all field types
+- Empty arrays for repeated fields
+- Nested message structures
+- Proper initialization of map fields
 
-## 📞 联系方式
+### 🤝 Contributing
 
-如有问题或建议，请提交Issue。
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### 📄 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+### 🙏 Acknowledgments
+
+- [Vue.js](https://vuejs.org/) - The Progressive JavaScript Framework
+- [Element Plus](https://element-plus.org/) - Vue 3 UI Framework
+- [protobuf.js](https://github.com/protobufjs/protobuf.js) - Protocol Buffers for JavaScript
+
+### 📮 Contact
+
+For issues and suggestions, please use [GitHub Issues](https://github.com/yourusername/prosocket/issues).
+
+### 🔍 FAQ
+
+**Q: Why can't received messages be decoded?**  
+A: Make sure you have imported the correct proto files and configured the correct message type in the decoding settings.
+
+**Q: How to handle bytes fields containing nested messages?**  
+A: In form mode, set the bytes field to "Message Type" mode, then select the appropriate message type for editing.
+
+**Q: Which WebSocket subprotocols are supported?**  
+A: Currently supports standard ws:// and wss:// protocols. Custom subprotocols are not yet supported.
+
+**Q: How to debug complex nested messages?**  
+A: Use the "Decode Nested Messages" feature in the message history to parse nested binary data layer by layer.
+
+---
+
+**ProSocket** - Making WebSocket + Protobuf debugging simple and efficient!
